@@ -192,12 +192,13 @@ h1, h2, h3, h4, h5, h6 {
 #hero {
   width: 100%;
   height: 100vh;
-  background: url("../img/background4.png") top center;
-  background-size: cover;
+  background: url("../img/mobile-background2.webp") top right;
+  background-size: cover;	
 }
+
 #hero:before {
   content: "";
-  background: rgba(5, 13, 24, 0.3);
+  background: linear-gradient(to left, transparent 0%, black 100%);
   position: absolute;
   bottom: 0;
   top: 0;
@@ -207,17 +208,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 #hero .hero-container {
   position: relative;
-  z-index: 200;
+  z-index: 400;
   min-width: 400px;
 }
 
+
 #hero .hero-container2 {
-  z-index: 200;
+  z-index: 400;
   min-width: 45px;
   position: relative;
-  bottom: -280px;
-  left: 0x;
-  background-color: rgba(255, 255, 255, 0.5);
+  bottom: -270px;
+  left: 300x;
+  background-color: #008080;
 	border-radius: 20px;
   text-align: center;
 }
@@ -226,15 +228,17 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 28px;
   color: #fff;
   line-height: 0;
+  padding: 10px;
 }
 #hero .hero-container2:hover {
-  background: #008080;
+  background: #37b3ed;
   color: #fff;
 }
 #hero .hero-container2 {
   visibility: visible;
   opacity: 1;
 }
+
 
 #hero h1 {
   margin: 0 0 10px 0;
@@ -258,7 +262,28 @@ h1, h2, h3, h4, h5, h6 {
 @media (min-width: 1024px) {
   #hero {
     background-attachment: fixed;
+	width: 100%;
+    height: 100vh;
+    background: url("../img/background-bw.webp") bottom center;
+    background-size: cover;
+    background-position: left;
+	  background-attachment: fixed;
+	 
   }
+	#hero .hero-container {
+  position: relative;
+  z-index: 400;
+  min-width: 500px;
+}
+	.hero-container2 {
+	margin-left:300px;
+}
+	.col-lg-4  img {
+	padding-right:  30px;
+	padding-left:  30px;
+}
+
+
 }
 @media (max-width: 768px) {
   #hero h1 {
@@ -283,11 +308,28 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 1px;
   border-bottom: 3px solid #008080;
 }
+	.portfolio .portfolio-wrap .portfolio-links a {
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  background: rgba(100, 100, 100, 0.95);
+  transition: 0.3s;
+  min-width: 50%;
+}
 }
 
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
+
+.col-lg-8 h3 {
+	margin-bottom: 50px;
+}
+
+.col-lg-6 {
+	margin-bottom: 10px;
+}
+
 section {
   padding: 60px 0;
   overflow: hidden;
@@ -559,16 +601,20 @@ section {
   transition: all ease-in-out 0.3s;
   display: flex;
   justify-content: center;
+	
 }
 
 .portfolio .portfolio-wrap .portfolio-links a {
   color: #fff;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   background: rgba(100, 100, 100, 0.95);
   transition: 0.3s;
-  width: 50%;
+	width: 43%;
+  
+
 }
+
 .portfolio .portfolio-wrap .portfolio-links a:hover {
   background: rgba(0, 128, 128, 0.95);
 }
