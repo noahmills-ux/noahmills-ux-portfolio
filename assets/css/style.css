@@ -217,8 +217,7 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 400;
   min-width: 45px;
   position: relative;
-  bottom: -270px;
-  left: 300x;
+  bottom: -150px;
   background-color: #008080;
 	border-radius: 20px;
   text-align: center;
@@ -228,7 +227,6 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 28px;
   color: #fff;
   line-height: 0;
-  padding: 10px;
 }
 #hero .hero-container2:hover {
   background: #37b3ed;
