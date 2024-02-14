@@ -198,7 +198,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #hero:before {
   content: "";
-  background: linear-gradient(to left, transparent 0%, black 100%);
+  background: linear-gradient( transparent 0%, black 100%);
   position: absolute;
   bottom: 0;
   top: 0;
@@ -281,6 +281,16 @@ h1, h2, h3, h4, h5, h6 {
 	.col-lg-4  img {
 	padding-right:  30px;
 	padding-left:  30px;
+}
+	#hero:before {
+  content: "";
+  background: linear-gradient(to left, transparent 0%, black 100%);
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
 }
 
 
