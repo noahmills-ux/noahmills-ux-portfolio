@@ -278,10 +278,7 @@ h1, h2, h3, h4, h5, h6 {
 	.hero-container2 {
 	margin-left:300px;
 }
-	.col-lg-4  img {
-	padding-right:  30px;
-	padding-left:  30px;
-}
+
 	#hero:before {
   content: "";
   background: linear-gradient(to left, transparent 0%, black 100%);
@@ -621,7 +618,7 @@ section {
   text-align: center;
   background: rgba(100, 100, 100, 0.95);
   transition: 0.3s;
-	width: 43%;
+	width: 100%;
   
 
 }
