@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio-site",
+      "runtimeExecutable": "ruby",
+      "runtimeArgs": ["-rwebrick", "-e", "WEBrick::HTTPServer.new(:Port=>8080,:DocumentRoot=>'/tmp/portfolio-preview').start"],
+      "port": 8080
+    }
+  ]
+}
