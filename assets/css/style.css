@@ -1830,28 +1830,50 @@ section:first-of-type {
 /*--------------------------------------------------------------
 # Page Transition
 --------------------------------------------------------------*/
-@keyframes pageReveal {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+/* Page transition overlay */
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #000;
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left center;
 }
 
-#page-wrapper {
-  animation: pageReveal 0.6s ease-out forwards;
+.page-transition-overlay.entering {
+  transform: scaleX(1);
+  animation: transitionWipeIn 0.4s cubic-bezier(0.7, 0, 0.3, 1) forwards;
 }
 
-#nav-panel {
-  animation: pageReveal 0.6s ease-out forwards;
+.page-transition-overlay.covering {
+  transform: scaleX(1);
 }
 
-/* Page exit transition for internal links */
-body.page-exit #page-wrapper,
-body.page-exit #nav-panel {
-  animation: pageExit 0.35s ease-in forwards;
+.page-transition-overlay.exiting {
+  transform: scaleX(1);
+  transform-origin: right center;
+  animation: transitionWipeOut 0.45s cubic-bezier(0.7, 0, 0.3, 1) forwards;
 }
 
-@keyframes pageExit {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes transitionWipeIn {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes transitionWipeOut {
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+
+/* Hide content while covered */
+body.page-covered #page-wrapper,
+body.page-covered #nav-panel {
+  opacity: 0;
+}
+
+#page-wrapper, #nav-panel {
+  transition: opacity 0s;
 }
 
 /* Section reveal with stagger */

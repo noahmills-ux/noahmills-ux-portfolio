@@ -408,22 +408,73 @@
   }
 
   /**
-   * Page transition effect for internal links
+   * Page transition overlay — fade to black wipe, then wipe away to reveal
    */
-  const internalLinks = select('a[href]', true);
-  internalLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      const href = this.getAttribute('href');
-      // Only apply to internal page links (not anchors, not external, not mailto)
-      if (href && !href.startsWith('#') && !href.startsWith('http') && !href.startsWith('mailto') && !this.getAttribute('target')) {
-        e.preventDefault();
-        document.body.classList.add('page-exit');
-        setTimeout(() => {
-          window.location.href = href;
-        }, 300);
+  (function initPageTransitions() {
+    // Create overlay element
+    let overlay = document.querySelector('.page-transition-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'page-transition-overlay';
+      document.body.appendChild(overlay);
+    }
+
+    // On page load: if we arrived via a transition, play the reveal
+    if (sessionStorage.getItem('pageTransitioning')) {
+      sessionStorage.removeItem('pageTransitioning');
+      document.body.classList.add('page-covered');
+      overlay.classList.add('covering');
+      // Small delay to ensure paint, then wipe away
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          overlay.classList.remove('covering');
+          overlay.classList.add('exiting');
+          document.body.classList.remove('page-covered');
+          overlay.addEventListener('animationend', function handler() {
+            overlay.classList.remove('exiting');
+            overlay.removeEventListener('animationend', handler);
+          });
+        });
+      });
+    }
+
+    // Handle browser back/forward (bfcache)
+    window.addEventListener('pageshow', function(e) {
+      if (e.persisted) {
+        // Page was restored from bfcache (back/forward)
+        document.body.classList.add('page-covered');
+        overlay.classList.add('covering');
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            overlay.classList.remove('covering');
+            overlay.classList.add('exiting');
+            document.body.classList.remove('page-covered');
+            overlay.addEventListener('animationend', function handler() {
+              overlay.classList.remove('exiting');
+              overlay.removeEventListener('animationend', handler);
+            });
+          });
+        });
       }
     });
-  });
+
+    // Intercept internal link clicks
+    const internalLinks = select('a[href]', true);
+    internalLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href && !href.startsWith('#') && !href.startsWith('http') && !href.startsWith('mailto') && !this.getAttribute('target') && !this.hasAttribute('download')) {
+          e.preventDefault();
+          sessionStorage.setItem('pageTransitioning', '1');
+          overlay.classList.add('entering');
+          overlay.addEventListener('animationend', function handler() {
+            overlay.removeEventListener('animationend', handler);
+            window.location.href = href;
+          });
+        }
+      });
+    });
+  })();
 
   /**
    * Staggered portfolio item reveal on scroll
