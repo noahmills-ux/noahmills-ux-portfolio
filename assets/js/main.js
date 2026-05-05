@@ -408,7 +408,7 @@
   }
 
   /**
-   * Page transition overlay — fade to black wipe, then wipe away to reveal
+   * Page transition overlay — smooth gradient fade in/out
    */
   (function initPageTransitions() {
     // Create overlay element
@@ -419,43 +419,44 @@
       document.body.appendChild(overlay);
     }
 
-    // On page load: if we arrived via a transition, play the reveal
-    if (sessionStorage.getItem('pageTransitioning')) {
-      sessionStorage.removeItem('pageTransitioning');
-      document.body.classList.add('page-covered');
+    // Reveal function — fades out overlay to show page content
+    function revealPage() {
       overlay.classList.add('covering');
-      // Small delay to ensure paint, then wipe away
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           overlay.classList.remove('covering');
           overlay.classList.add('exiting');
-          document.body.classList.remove('page-covered');
-          overlay.addEventListener('animationend', function handler() {
+          // Clean up after fade out completes
+          setTimeout(() => {
             overlay.classList.remove('exiting');
-            overlay.removeEventListener('animationend', handler);
-          });
+          }, 650);
         });
       });
     }
 
-    // Handle browser back/forward (bfcache)
+    // On page load: if we arrived via a transition, play the reveal
+    if (sessionStorage.getItem('pageTransitioning')) {
+      sessionStorage.removeItem('pageTransitioning');
+      revealPage();
+    }
+
+    // Handle browser back/forward
     window.addEventListener('pageshow', function(e) {
       if (e.persisted) {
-        // Page was restored from bfcache (back/forward)
-        document.body.classList.add('page-covered');
-        overlay.classList.add('covering');
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            overlay.classList.remove('covering');
-            overlay.classList.add('exiting');
-            document.body.classList.remove('page-covered');
-            overlay.addEventListener('animationend', function handler() {
-              overlay.classList.remove('exiting');
-              overlay.removeEventListener('animationend', handler);
-            });
-          });
-        });
+        // Page restored from bfcache — fade overlay out
+        overlay.classList.remove('entering');
+        revealPage();
       }
+    });
+
+    // Also handle popstate for browsers that don't use bfcache
+    window.addEventListener('popstate', function() {
+      // If overlay is somehow stuck visible, clear it
+      overlay.classList.remove('entering', 'covering');
+      overlay.classList.add('exiting');
+      setTimeout(() => {
+        overlay.classList.remove('exiting');
+      }, 650);
     });
 
     // Intercept internal link clicks
@@ -467,10 +468,10 @@
           e.preventDefault();
           sessionStorage.setItem('pageTransitioning', '1');
           overlay.classList.add('entering');
-          overlay.addEventListener('animationend', function handler() {
-            overlay.removeEventListener('animationend', handler);
+          // Navigate after fade-in completes
+          setTimeout(() => {
             window.location.href = href;
-          });
+          }, 500);
         }
       });
     });
